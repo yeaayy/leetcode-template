@@ -1,0 +1,5 @@
+*
+!.gitignore
+!helper.cpp
+!template.cpp
+!watch

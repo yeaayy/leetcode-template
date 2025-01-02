@@ -1,0 +1,46 @@
+#! /bin/bash
+
+if [ ${#*} -eq 0 ]; then
+    echo "usage: $0 file [timeout]"
+    exit
+fi
+
+file=$1
+shift
+timeout=${1:-2s}
+
+files=()
+COMPILER=
+RUNNER=exit
+case $file in
+    *.cpp)
+        COMPILER="g++ -std=c++20 -O3 '$file'"
+        RUNNER=./a.out
+        files[0]="$file"
+        files[1]="helper.cpp"
+        ;;
+    *.c)
+        COMPILER="gcc -O3 '$file'"
+        RUNNER=./a.out
+        files[0]="$file"
+        ;;
+    *.js)
+        RUNNER="node '$file'"
+        files[0]="$file"
+        ;;
+    *.py)
+        RUNNER="python3 '$file'"
+        files[0]="$file"
+        ;;
+    *)
+        echo "Can't run file $1">&2
+        exit
+esac
+
+for i in $(seq 0 $((${#files[@]} - 1))); do
+    echo ${files[i]}
+done | if [ -n "$COMPILER" ]; then
+    entr -s "clear && date && $COMPILER && (time timeout $timeout $RUNNER || echo \(Time Limit Exceed\))"
+else
+    entr -s "clear && date && timeout $timeout $RUNNER"
+fi
