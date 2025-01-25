@@ -1,5 +1,8 @@
+#include <assert.h>
+
 #include <iostream>
 #include <map>
+#include <memory>
 #include <queue>
 #include <set>
 #include <sstream>
@@ -9,6 +12,7 @@
 
 using namespace std;
 
+#ifdef ARR_GRID
 template<typename T>
 std::ostream &operator<<(std::ostream &out, const std::vector<vector<T>> &v) {
     out << "[";
@@ -19,6 +23,7 @@ std::ostream &operator<<(std::ostream &out, const std::vector<vector<T>> &v) {
     out << "]";
     return out;
 }
+#endif
 
 template<typename T>
 std::ostream &operator<<(std::ostream &out, const std::vector<T> &v) {
